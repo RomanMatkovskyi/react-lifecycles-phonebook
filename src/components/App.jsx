@@ -5,10 +5,26 @@ import Filter from './filter/filter';
 import { nanoid } from 'nanoid';
 
 class App extends Component {
-   state = {
-   contacts: [],
-   filter: '',
+  state = {
+    contacts: [],
+    filter: '',
   };
+
+  componentDidMount() {
+    let savedContacts = localStorage.getItem('Contacts');
+    if (savedContacts) {
+      this.setState({ contacts: JSON.parse(savedContacts) });
+    } else {
+      this.setState({ contacts: [] });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      let newContacts = JSON.stringify(this.state.contacts);
+      localStorage.setItem('Contacts', newContacts);
+    }
+  }
 
   handleInputChange = event => {
     this.setState({ [event.target.name]: event.target.value });
